@@ -47,14 +47,32 @@ class Router
             PHP_URL_PATH
         );
 
+        if (!is_string($path)) {
+            $path = '/';
+        }
+
         $routes = $method === 'POST'
             ? $this->postRoutes
             : $this->getRoutes;
 
-        if (isset($routes[$path])) {
-            $routes[$path]();
+        foreach ($routes as $route => $callback) {
+            $pattern = preg_replace(
+                '#\{id\}#',
+                '([0-9]+)',
+                $route
+            );
 
-            return;
+            if ($pattern === null) {
+                continue;
+            }
+
+            if (preg_match('#^' . $pattern . '$#', $path, $matches)) {
+                array_shift($matches);
+
+                $callback(...$matches);
+
+                return;
+            }
         }
 
         http_response_code(404);

@@ -44,7 +44,11 @@ $router->post('/login', [$authController, 'login']);
 $router->get('/logout', [$authController, 'logout']);
 
 $router->get('/trips/create', [$tripController, 'create']);
-
 $router->post('/trips/create', [$tripController, 'store']);
+
+$router->get('/trips/{id}/edit', [$tripController, 'edit']);
+$router->post('/trips/{id}/edit', [$tripController, 'update']);
+
+$router->post('/trips/{id}/delete', [$tripController, 'delete']);
 
 $router->dispatch();
