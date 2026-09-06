@@ -76,10 +76,31 @@ require dirname(__DIR__) . '/layouts/header.php';
                         </td>
 
                         <?php if ($user !== null): ?>
-                            <td>
-                                👁
-                            </td>
-                        <?php endif; ?>
+    <td>
+        <span title="Voir les détails">👁</span>
+
+        <?php if ((int) $trip['id_employe'] === (int) $user['id']): ?>
+
+            <a
+                href="/trips/<?= (int) $trip['id_trajet'] ?>/edit"
+                title="Modifier"
+            >
+                ✏️
+            </a>
+
+            <form
+                method="POST"
+                action="/trips/<?= (int) $trip['id_trajet'] ?>/delete"
+                style="display: inline;"
+            >
+                <button type="submit" title="Supprimer">
+                    🗑️
+                </button>
+            </form>
+
+        <?php endif; ?>
+    </td>
+<?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
