@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Session;
 use App\Repositories\TripRepository;
 
 /**
@@ -18,13 +19,19 @@ class HomeController
     }
 
     /**
-     * Displays the home page with available trips.
-     */
-    public function index(): void
-    {
-        $trips = $this->tripRepository->findAvailableTrips();
-        $user = Auth::user();
+ * Displays the home page with available trips.
+ */
+public function index(): void
+{
+    $trips = $this->tripRepository->findAvailableTrips();
+    $user = Auth::user();
 
-        require dirname(__DIR__, 2) . '/templates/home/index.php';
+    $flashSuccess = Session::get('flash_success');
+
+    if ($flashSuccess !== null) {
+        Session::remove('flash_success');
     }
+
+    require dirname(__DIR__, 2) . '/templates/home/index.php';
+}
 }

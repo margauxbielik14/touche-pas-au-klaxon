@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
+use App\Controllers\TripController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Session;
 use App\Repositories\TripRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\AgencyRepository;
 use Dotenv\Dotenv;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -23,9 +25,14 @@ $connection = $database->getConnection();
 
 $tripRepository = new TripRepository($connection);
 $userRepository = new UserRepository($connection);
+$agencyRepository = new AgencyRepository($connection);
 
 $homeController = new HomeController($tripRepository);
 $authController = new AuthController($userRepository);
+$tripController = new TripController(
+    $tripRepository,
+    $agencyRepository
+);
 
 $router = new Router();
 
@@ -35,5 +42,9 @@ $router->get('/login', [$authController, 'showLoginForm']);
 $router->post('/login', [$authController, 'login']);
 
 $router->get('/logout', [$authController, 'logout']);
+
+$router->get('/trips/create', [$tripController, 'create']);
+
+$router->post('/trips/create', [$tripController, 'store']);
 
 $router->dispatch();

@@ -6,6 +6,11 @@ require dirname(__DIR__) . '/layouts/header.php';
 ?>
 
 <main>
+    <?php if (!empty($flashSuccess)): ?>
+        <div>
+            <?= htmlspecialchars((string) $flashSuccess) ?>
+        </div>
+    <?php endif; ?>
 
     <?php if ($user === null): ?>
         <h1>
