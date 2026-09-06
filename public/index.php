@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\TripController;
+use App\Controllers\AdminController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Session;
@@ -34,6 +35,8 @@ $tripController = new TripController(
     $agencyRepository
 );
 
+$adminController = new AdminController($userRepository);
+
 $router = new Router();
 
 $router->get('/', [$homeController, 'index']);
@@ -50,5 +53,8 @@ $router->get('/trips/{id}/edit', [$tripController, 'edit']);
 $router->post('/trips/{id}/edit', [$tripController, 'update']);
 
 $router->post('/trips/{id}/delete', [$tripController, 'delete']);
+
+$router->get('/admin', [$adminController, 'dashboard']);
+$router->get('/admin/users', [$adminController, 'users']);
 
 $router->dispatch();
