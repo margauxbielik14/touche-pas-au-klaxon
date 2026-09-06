@@ -45,4 +45,28 @@ class UserRepository
 
         return $statement->fetch();
     }
+
+    /**
+ * Returns all employees.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+public function findAll(): array
+{
+    $sql = '
+        SELECT
+            id_employe,
+            nom,
+            prenom,
+            email,
+            telephone,
+            role
+        FROM employe
+        ORDER BY nom ASC, prenom ASC
+    ';
+
+    $statement = $this->connection->query($sql);
+
+    return $statement->fetchAll();
+}
 }
