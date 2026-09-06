@@ -1,0 +1,6 @@
+/vendor/
+.env
+.DS_Store
+.phpunit.cache/
+.phpstan.cache/
+/public/assets/css/*.map
