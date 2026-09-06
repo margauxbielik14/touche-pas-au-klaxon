@@ -4,3 +4,4 @@
 .phpunit.cache/
 .phpstan.cache/
 /public/assets/css/*.map
+/node_modules/
