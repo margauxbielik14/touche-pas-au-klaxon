@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Repositories\TripRepository;
 
 /**
@@ -22,6 +23,7 @@ class HomeController
     public function index(): void
     {
         $trips = $this->tripRepository->findAvailableTrips();
+        $user = Auth::user();
 
         require dirname(__DIR__, 2) . '/templates/home/index.php';
     }

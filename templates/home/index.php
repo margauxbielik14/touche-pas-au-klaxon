@@ -1,45 +1,87 @@
 <?php
 
 declare(strict_types=1);
+
+require dirname(__DIR__) . '/layouts/header.php';
 ?>
 
-<h1>Touche pas au klaxon</h1>
+<main>
 
-<h2>Trajets disponibles</h2>
+    <?php if ($user === null): ?>
+        <h1>
+            Pour obtenir plus d'informations sur un trajet,
+            veuillez vous connecter
+        </h1>
+    <?php else: ?>
+        <h1>Trajets proposés</h1>
+    <?php endif; ?>
 
-<?php if (empty($trips)): ?>
+    <?php if (empty($trips)): ?>
 
-    <p>Aucun trajet disponible.</p>
+        <p>Aucun trajet disponible.</p>
 
-<?php else: ?>
+    <?php else: ?>
 
-    <?php foreach ($trips as $trip): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Départ</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Destination</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Places</th>
 
-        <div>
-            <strong>
-                <?= htmlspecialchars((string) $trip['agence_depart']) ?>
-                →
-                <?= htmlspecialchars((string) $trip['agence_arrivee']) ?>
-            </strong>
+                    <?php if ($user !== null): ?>
+                        <th>Actions</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
 
-            <p>
-                Départ :
-                <?= htmlspecialchars((string) $trip['date_heure_depart']) ?>
-            </p>
+            <tbody>
+                <?php foreach ($trips as $trip): ?>
+                    <?php
+                    $departure = new DateTime(
+                        (string) $trip['date_heure_depart']
+                    );
 
-            <p>
-                Arrivée :
-                <?= htmlspecialchars((string) $trip['date_heure_arrivee']) ?>
-            </p>
+                    $arrival = new DateTime(
+                        (string) $trip['date_heure_arrivee']
+                    );
+                    ?>
 
-            <p>
-                Places disponibles :
-                <?= (int) $trip['nombre_places_disponibles'] ?>
-            </p>
-        </div>
+                    <tr>
+                        <td>
+                            <?= htmlspecialchars((string) $trip['agence_depart']) ?>
+                        </td>
 
-        <hr>
+                        <td><?= $departure->format('d/m/y') ?></td>
+                        <td><?= $departure->format('H:i') ?></td>
 
-    <?php endforeach; ?>
+                        <td>
+                            <?= htmlspecialchars((string) $trip['agence_arrivee']) ?>
+                        </td>
 
-<?php endif; ?>
+                        <td><?= $arrival->format('d/m/y') ?></td>
+                        <td><?= $arrival->format('H:i') ?></td>
+
+                        <td>
+                            <?= (int) $trip['nombre_places_disponibles'] ?>
+                        </td>
+
+                        <?php if ($user !== null): ?>
+                            <td>
+                                👁
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    <?php endif; ?>
+
+</main>
+
+<?php require dirname(__DIR__) . '/layouts/footer.php'; ?>
