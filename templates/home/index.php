@@ -6,6 +6,7 @@ require dirname(__DIR__) . '/layouts/header.php';
 ?>
 
 <main>
+
     <?php if (!empty($flashSuccess)): ?>
         <div>
             <?= htmlspecialchars((string) $flashSuccess) ?>
@@ -13,11 +14,24 @@ require dirname(__DIR__) . '/layouts/header.php';
     <?php endif; ?>
 
     <?php if ($user === null): ?>
+
         <h1>
             Pour obtenir plus d'informations sur un trajet,
             veuillez vous connecter
         </h1>
+
     <?php else: ?>
+
+        <h1>Trajets proposés</h1>
+
+    <?php endif; ?>
+
+    <?php if (empty($trips)): ?>
+
+        <p>Aucun trajet disponible.</p>
+
+    <?php else: ?>
+
         <h1>Trajets proposés</h1>
     <?php endif; ?>
 
@@ -77,7 +91,15 @@ require dirname(__DIR__) . '/layouts/header.php';
 
                         <?php if ($user !== null): ?>
     <td>
-        <span title="Voir les détails">👁</span>
+        <button
+    type="button"
+    class="btn btn-sm btn-outline-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#tripModal<?= (int) $trip['id_trajet'] ?>"
+    title="Voir les détails"
+>
+    👁
+</button>
 
         <?php if ((int) $trip['id_employe'] === (int) $user['id']): ?>
 
@@ -105,6 +127,78 @@ require dirname(__DIR__) . '/layouts/header.php';
                 <?php endforeach; ?>
             </tbody>
         </table>
+
+        <?php if ($user !== null): ?>
+
+    <?php foreach ($trips as $trip): ?>
+
+        <div
+            class="modal fade"
+            id="tripModal<?= (int) $trip['id_trajet'] ?>"
+            tabindex="-1"
+            aria-labelledby="tripModalLabel<?= (int) $trip['id_trajet'] ?>"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h2
+                            class="modal-title fs-5"
+                            id="tripModalLabel<?= (int) $trip['id_trajet'] ?>"
+                        >
+                            Détails de l'utilisateur
+                        </h2>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Fermer"
+                        ></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <p>
+                            <strong>Nom Prénom :</strong>
+                            <?= htmlspecialchars(
+                                (string) $trip['conducteur_nom']
+                                . ' '
+                                . (string) $trip['conducteur_prenom']
+                            ) ?>
+                        </p>
+
+                        <p>
+                            <strong>Téléphone :</strong>
+                            <?= htmlspecialchars(
+                                (string) $trip['conducteur_telephone']
+                            ) ?>
+                        </p>
+
+                        <p>
+                            <strong>Email :</strong>
+                            <?= htmlspecialchars(
+                                (string) $trip['conducteur_email']
+                            ) ?>
+                        </p>
+
+                        <p>
+                            <strong>Nombre de places :</strong>
+                            <?= (int) $trip['nombre_places_total'] ?>
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    <?php endforeach; ?>
+
+<?php endif; ?>
 
     <?php endif; ?>
 

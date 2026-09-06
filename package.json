@@ -1,0 +1,31 @@
+{
+  "name": "touche-pas-au-klaxon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "sass": "sass src/scss/main.scss public/assets/css/main.css",
+    "sass:watch": "sass --watch src/scss/main.scss public/assets/css/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/margauxbielik14/touche-pas-au-klaxon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/margauxbielik14/touche-pas-au-klaxon/issues"
+  },
+  "homepage": "https://github.com/margauxbielik14/touche-pas-au-klaxon#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "sass": "^1.104.0"
+  }
+}

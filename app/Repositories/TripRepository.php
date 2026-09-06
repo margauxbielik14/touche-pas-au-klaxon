@@ -24,23 +24,31 @@ class TripRepository
     public function findAvailableTrips(): array
     {
         $sql = '
-            SELECT
-                t.id_trajet,
-                t.id_employe,
-                t.date_heure_depart,
-                t.date_heure_arrivee,
-                t.nombre_places_disponibles,
-                depart.ville AS agence_depart,
-                arrivee.ville AS agence_arrivee
-            FROM trajet AS t
-            INNER JOIN agence AS depart
-                ON t.id_agence_depart = depart.id_agence
-            INNER JOIN agence AS arrivee
-                ON t.id_agence_arrivee = arrivee.id_agence
-            WHERE t.nombre_places_disponibles > 0
-                AND t.date_heure_depart > NOW()
-            ORDER BY t.date_heure_depart ASC
-        ';
+    SELECT
+        t.id_trajet,
+        t.id_employe,
+        t.date_heure_depart,
+        t.date_heure_arrivee,
+        t.nombre_places_total,
+        t.nombre_places_disponibles,
+        depart.ville AS agence_depart,
+        arrivee.ville AS agence_arrivee,
+        e.nom AS conducteur_nom,
+        e.prenom AS conducteur_prenom,
+        e.email AS conducteur_email,
+        e.telephone AS conducteur_telephone
+    FROM trajet t
+    INNER JOIN agence depart
+        ON depart.id_agence = t.id_agence_depart
+    INNER JOIN agence arrivee
+        ON arrivee.id_agence = t.id_agence_arrivee
+    INNER JOIN employe e
+        ON e.id_employe = t.id_employe
+    WHERE
+        t.nombre_places_disponibles > 0
+        AND t.date_heure_depart > NOW()
+    ORDER BY t.date_heure_depart ASC
+';
 
         $statement = $this->connection->query($sql);
 
