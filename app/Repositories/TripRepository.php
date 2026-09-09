@@ -183,4 +183,37 @@ public function delete(int $tripId): bool
         'trip_id' => $tripId,
     ]);
 }
+
+/**
+ * Returns all trips for administration.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+public function findAll(): array
+{
+    $sql = '
+        SELECT
+            t.id_trajet,
+            t.date_heure_depart,
+            t.date_heure_arrivee,
+            t.nombre_places_total,
+            t.nombre_places_disponibles,
+            e.nom AS conducteur_nom,
+            e.prenom AS conducteur_prenom,
+            depart.ville AS agence_depart,
+            arrivee.ville AS agence_arrivee
+        FROM trajet t
+        INNER JOIN employe e
+            ON e.id_employe = t.id_employe
+        INNER JOIN agence depart
+            ON depart.id_agence = t.id_agence_depart
+        INNER JOIN agence arrivee
+            ON arrivee.id_agence = t.id_agence_arrivee
+        ORDER BY t.date_heure_depart ASC
+    ';
+
+    $statement = $this->connection->query($sql);
+
+    return $statement->fetchAll();
+}
 }

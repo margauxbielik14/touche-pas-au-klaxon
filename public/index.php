@@ -7,6 +7,7 @@ use App\Controllers\HomeController;
 use App\Controllers\TripController;
 use App\Controllers\AdminController;
 use App\Controllers\AdminAgencyController;
+use App\Controllers\AdminTripController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Session;
@@ -38,6 +39,10 @@ $tripController = new TripController(
 
 $adminController = new AdminController($userRepository);
 $adminAgencyController = new AdminAgencyController(
+    $agencyRepository
+);
+$adminTripController = new AdminTripController(
+    $tripRepository,
     $agencyRepository
 );
 
@@ -89,6 +94,26 @@ $router->post(
 $router->post(
     '/admin/agencies/{id}/delete',
     [$adminAgencyController, 'delete']
+);
+
+$router->get(
+    '/admin/trips',
+    [$adminTripController, 'index']
+);
+
+$router->get(
+    '/admin/trips/{id}/edit',
+    [$adminTripController, 'edit']
+);
+
+$router->post(
+    '/admin/trips/{id}/edit',
+    [$adminTripController, 'update']
+);
+
+$router->post(
+    '/admin/trips/{id}/delete',
+    [$adminTripController, 'delete']
 );
 
 $router->dispatch();
