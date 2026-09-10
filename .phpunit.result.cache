@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"AgencyRepositoryTest::testCreateAgency":0.001,"AgencyRepositoryTest::testUpdateAgency":0.001,"AgencyRepositoryTest::testDeleteAgency":0.001,"TripRepositoryTest::testCreateTrip":0.001,"TripRepositoryTest::testUpdateTrip":0.001,"TripRepositoryTest::testDeleteTrip":0.001}}
