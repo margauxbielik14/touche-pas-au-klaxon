@@ -6,3 +6,126 @@ $success: #82b864;
 $light: #f1f8fc;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
+
+
+body {
+    background-color: $light;
+    color: $dark;
+}
+
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    .navbar-brand {
+        font-size: 1.35rem;
+        letter-spacing: 0.02em;
+    }
+
+    .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+
+        &:hover,
+        &:focus {
+            color: #ffffff;
+        }
+    }
+}
+
+
+main {
+    min-height: 60vh;
+}
+
+
+h1,
+h2,
+h3 {
+    color: $secondary;
+}
+
+
+.table {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    thead {
+        th {
+            color: $secondary;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    }
+
+    tbody {
+        tr {
+            transition: background-color 0.2s ease;
+        }
+    }
+}
+
+
+.card {
+    border: none;
+    border-radius: 0.75rem;
+
+    .card-title {
+        color: $secondary;
+    }
+}
+
+
+fieldset {
+    background-color: #ffffff;
+
+    legend {
+        color: $secondary;
+        font-weight: 600;
+    }
+}
+
+
+.form-control,
+.form-select {
+    &:focus {
+        border-color: $primary;
+        box-shadow: 0 0 0 0.2rem rgba(0, 116, 199, 0.15);
+    }
+}
+
+
+.btn {
+    border-radius: 0.45rem;
+    font-weight: 500;
+}
+
+
+.alert {
+    border-radius: 0.5rem;
+}
+
+
+footer {
+    font-size: 0.95rem;
+}
+
+
+@media (max-width: 767.98px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .navbar-text {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        white-space: nowrap;
+    }
+}

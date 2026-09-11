@@ -3,57 +3,92 @@
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/layouts/header.php';
+
 ?>
 
-<main class="container py-5">
+<main class="container py-5 flex-grow-1">
 
-    <h1 class="mb-4">Modifier une agence</h1>
+    <div class="row justify-content-center">
 
-    <?php if (!empty($errors)): ?>
+        <div class="col-12 col-md-8 col-lg-6">
 
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <?php foreach ($errors as $error): ?>
-                    <li><?= htmlspecialchars($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+            <h1 class="text-center mb-4">
+                Modifier une agence
+            </h1>
 
-    <?php endif; ?>
+            <?php if (!empty($errors)): ?>
 
-    <form
-        method="POST"
-        action="/admin/agencies/<?= (int) $agency['id_agence'] ?>/edit"
-    >
+                <div class="alert alert-danger" role="alert">
 
-        <div class="mb-3">
-            <label for="ville" class="form-label">
-                Ville
-            </label>
+                    <strong>
+                        L'agence n'a pas pu être modifiée :
+                    </strong>
 
-            <input
-                type="text"
-                id="ville"
-                name="ville"
-                class="form-control"
-                maxlength="100"
-                value="<?= htmlspecialchars((string) $agency['ville']) ?>"
-                required
+                    <ul class="mb-0 mt-2">
+
+                        <?php foreach ($errors as $error): ?>
+
+                            <li>
+                                <?= htmlspecialchars($error) ?>
+                            </li>
+
+                        <?php endforeach; ?>
+
+                    </ul>
+
+                </div>
+
+            <?php endif; ?>
+
+            <form
+                method="POST"
+                action="/admin/agencies/<?= (int) $agency['id_agence'] ?>/edit"
             >
+
+                <div class="mb-4">
+
+                    <label
+                        for="ville"
+                        class="form-label"
+                    >
+                        Ville
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ville"
+                        name="ville"
+                        class="form-control"
+                        maxlength="100"
+                        value="<?= htmlspecialchars((string) $agency['ville']) ?>"
+                        required
+                    >
+
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+
+                    <a
+                        href="/admin/agencies"
+                        class="btn btn-outline-secondary"
+                    >
+                        Annuler
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Enregistrer les modifications
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
 
-        <button type="submit" class="btn btn-primary">
-            Enregistrer les modifications
-        </button>
-
-        <a
-            href="/admin/agencies"
-            class="btn btn-secondary"
-        >
-            Annuler
-        </a>
-
-    </form>
+    </div>
 
 </main>
 
