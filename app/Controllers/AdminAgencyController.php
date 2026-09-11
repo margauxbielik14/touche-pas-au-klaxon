@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Repositories\AgencyRepository;
 use App\Core\Session;
 
@@ -54,6 +55,8 @@ public function create(): void
 public function store(): void
 {
     Auth::requireAdmin();
+
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
     $city = trim($_POST['ville'] ?? '');
 
@@ -119,6 +122,8 @@ public function update(string $id): void
 {
     Auth::requireAdmin();
 
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
+
     $agencyId = (int) $id;
     $agency = $this->agencyRepository->findById($agencyId);
 
@@ -180,6 +185,8 @@ public function update(string $id): void
 public function delete(string $id): void
 {
     Auth::requireAdmin();
+
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
     $agencyId = (int) $id;
     $agency = $this->agencyRepository->findById($agencyId);

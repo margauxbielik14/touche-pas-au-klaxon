@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Core\Session;
 use App\Repositories\AgencyRepository;
 use App\Repositories\TripRepository;
@@ -39,6 +40,8 @@ public function store(): void
 {
     Auth::requireLogin();
 
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
+
     $user = Auth::user();
 
     if ($user === null) {
@@ -58,6 +61,13 @@ public function store(): void
         || $arrivalAgencyId <= 0
     ) {
         $errors[] = 'Veuillez sélectionner les agences.';
+    }
+
+    if (
+    $arrivalAgencyId > 0
+    && $this->agencyRepository->findById($arrivalAgencyId) === false
+    ) {
+    $errors[] = 'L’agence d’arrivée sélectionnée est invalide.';
     }
 
     if ($departureAgencyId === $arrivalAgencyId) {
@@ -152,6 +162,8 @@ public function edit(string $id): void
 public function update(string $id): void
 {
     Auth::requireLogin();
+
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
     $user = Auth::user();
 
@@ -255,6 +267,8 @@ public function update(string $id): void
 public function delete(string $id): void
 {
     Auth::requireLogin();
+
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
     $user = Auth::user();
 

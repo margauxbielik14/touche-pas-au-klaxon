@@ -6,3 +6,4 @@
 /public/assets/css/*.map
 /node_modules/
 .env.test
+.phpunit.result.cache

@@ -5,6 +5,10 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/layouts/header.php';
 ?>
 
+<?php
+use App\Core\Csrf;
+?>
+
 <main class="container py-5 flex-grow-1">
 
     <?php if (!empty($flashSuccess)): ?>
@@ -117,6 +121,13 @@ require dirname(__DIR__) . '/layouts/header.php';
                     action="/trips/<?= (int) $trip['id_trajet'] ?>/delete"
                     class="d-inline"
                 >
+
+                <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= htmlspecialchars(Csrf::token()) ?>"
+                >
+
                     <button
                         type="submit"
                         class="btn btn-sm btn-outline-danger"

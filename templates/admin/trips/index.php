@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Core\Csrf;
+
 require dirname(__DIR__, 2) . '/layouts/header.php';
 
 ?>
@@ -124,6 +126,12 @@ require dirname(__DIR__, 2) . '/layouts/header.php';
                                         method="POST"
                                         action="/admin/trips/<?= (int) $trip['id_trajet'] ?>/delete"
                                         class="d-inline"
+                                    >
+
+                                    <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="<?= htmlspecialchars(Csrf::token()) ?>"
                                     >
 
                                         <button

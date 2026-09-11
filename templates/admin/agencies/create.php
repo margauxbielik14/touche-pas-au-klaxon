@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Core\Csrf;
+
 require dirname(__DIR__, 2) . '/layouts/header.php';
 
 ?>
@@ -43,6 +45,12 @@ require dirname(__DIR__, 2) . '/layouts/header.php';
             <form
                 method="POST"
                 action="/admin/agencies/create"
+            >
+
+            <input
+            type="hidden"
+            name="csrf_token"
+            value="<?= htmlspecialchars(Csrf::token()) ?>"
             >
 
                 <div class="mb-4">
