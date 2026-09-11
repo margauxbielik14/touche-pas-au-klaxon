@@ -5,7 +5,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/layouts/header.php';
 ?>
 
-<main>
+<main class="container py-5 flex-grow-1">
 
     <?php if (!empty($flashSuccess)): ?>
         <div>
@@ -15,33 +15,29 @@ require dirname(__DIR__) . '/layouts/header.php';
 
     <?php if ($user === null): ?>
 
-        <h1>
-            Pour obtenir plus d'informations sur un trajet,
-            veuillez vous connecter
-        </h1>
+    <div class="text-center mb-4">
+    <h1 class="mb-3">Trajets proposés</h1>
 
-    <?php else: ?>
+    <p class="text-muted">
+        Pour obtenir plus d'informations sur un trajet,
+        veuillez vous connecter.
+    </p>
+</div>
 
-        <h1>Trajets proposés</h1>
+<?php else: ?>
 
-    <?php endif; ?>
+    <h1 class="text-center mb-4">Trajets proposés</h1>
 
-    <?php if (empty($trips)): ?>
+<?php endif; ?>
 
-        <p>Aucun trajet disponible.</p>
+<?php if (empty($trips)): ?>
 
-    <?php else: ?>
+    <p>Aucun trajet disponible.</p>
 
-        <h1>Trajets proposés</h1>
-    <?php endif; ?>
+<?php else: ?>
 
-    <?php if (empty($trips)): ?>
-
-        <p>Aucun trajet disponible.</p>
-
-    <?php else: ?>
-
-        <table>
+        <div class="table-responsive">
+    <table class="table table-hover align-middle">
             <thead>
                 <tr>
                     <th>Départ</th>
@@ -90,43 +86,58 @@ require dirname(__DIR__) . '/layouts/header.php';
                         </td>
 
                         <?php if ($user !== null): ?>
+
     <td>
-        <button
-    type="button"
-    class="btn btn-sm btn-outline-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#tripModal<?= (int) $trip['id_trajet'] ?>"
-    title="Voir les détails"
->
-    👁
-</button>
+        <div class="d-flex align-items-center gap-2">
 
-        <?php if ((int) $trip['id_employe'] === (int) $user['id']): ?>
-
-            <a
-                href="/trips/<?= (int) $trip['id_trajet'] ?>/edit"
-                title="Modifier"
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#tripModal<?= (int) $trip['id_trajet'] ?>"
+                title="Voir les détails"
+                aria-label="Voir les détails"
             >
-                ✏️
-            </a>
+                👁
+            </button>
 
-            <form
-                method="POST"
-                action="/trips/<?= (int) $trip['id_trajet'] ?>/delete"
-                style="display: inline;"
-            >
-                <button type="submit" title="Supprimer">
-                    🗑️
-                </button>
-            </form>
+            <?php if ((int) $trip['id_employe'] === (int) $user['id']): ?>
 
-        <?php endif; ?>
+                <a
+                    href="/trips/<?= (int) $trip['id_trajet'] ?>/edit"
+                    class="btn btn-sm btn-outline-primary"
+                    title="Modifier"
+                    aria-label="Modifier"
+                >
+                    ✏️
+                </a>
+
+                <form
+                    method="POST"
+                    action="/trips/<?= (int) $trip['id_trajet'] ?>/delete"
+                    class="d-inline"
+                >
+                    <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                        title="Supprimer"
+                        aria-label="Supprimer"
+                    >
+                        🗑️
+                    </button>
+                </form>
+
+            <?php endif; ?>
+
+        </div>
     </td>
+
 <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        </div>
 
         <?php if ($user !== null): ?>
 

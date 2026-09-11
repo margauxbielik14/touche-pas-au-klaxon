@@ -5,6 +5,9 @@ declare(strict_types=1);
 use App\Core\Auth;
 
 $user = Auth::user();
+
+$homeUrl = Auth::isAdmin() ? '/admin' : '/';
+
 ?>
 
 <!DOCTYPE html>
@@ -19,42 +22,113 @@ $user = Auth::user();
     <link rel="stylesheet" href="/assets/css/main.css">
 </head>
 
-<body>
-    
+<body class="d-flex flex-column min-vh-100">
+
 <header>
-    <nav>
-        <a href="/">Touche pas au klaxon</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
 
-        <?php if ($user === null): ?>
+            <a class="navbar-brand fw-bold" href="<?= $homeUrl ?>">
+                Touche pas au klaxon
+            </a>
 
-            <a href="/login">Connexion</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Afficher le menu"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <?php elseif (Auth::isAdmin()): ?>
+            <div
+                class="collapse navbar-collapse"
+                id="mainNavbar"
+            >
+                <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
 
-            <a href="/admin/users">Utilisateurs</a>
-            <a href="/admin/agencies">Agences</a>
-            <a href="/admin/trips">Trajets</a>
+                    <?php if ($user === null): ?>
 
-            <span>
-                Bonjour
-                <?= htmlspecialchars((string) $user['prenom']) ?>
-                <?= htmlspecialchars((string) $user['nom']) ?>
-            </span>
+                        <a
+                            class="nav-link"
+                            href="/login"
+                        >
+                            Connexion
+                        </a>
 
-            <a href="/logout">Déconnexion</a>
+                    <?php elseif (Auth::isAdmin()): ?>
 
-        <?php else: ?>
+                        <a
+                        class="nav-link"
+                        href="/admin"
+                        >
+                        Tableau de bord
+                        </a>
 
-            <a href="/trips/create">Créer un trajet</a>
+                        <a
+                            class="nav-link"
+                            href="/admin/users"
+                        >
+                            Utilisateurs
+                        </a>
 
-            <span>
-                Bonjour
-                <?= htmlspecialchars((string) $user['prenom']) ?>
-                <?= htmlspecialchars((string) $user['nom']) ?>
-            </span>
+                        <a
+                            class="nav-link"
+                            href="/admin/agencies"
+                        >
+                            Agences
+                        </a>
 
-            <a href="/logout">Déconnexion</a>
+                        <a
+                            class="nav-link"
+                            href="/admin/trips"
+                        >
+                            Trajets
+                        </a>
 
-        <?php endif; ?>
+                        <span class="navbar-text text-white">
+                            Bonjour
+                            <?= htmlspecialchars((string) $user['prenom']) ?>
+                            <?= htmlspecialchars((string) $user['nom']) ?>
+                        </span>
+
+                        <a
+                            class="nav-link"
+                            href="/logout"
+                        >
+                            Déconnexion
+                        </a>
+
+                    <?php else: ?>
+
+                        <a
+                            class="nav-link"
+                            href="/trips/create"
+                        >
+                            Créer un trajet
+                        </a>
+
+                        <span class="navbar-text text-white">
+                            Bonjour
+                            <?= htmlspecialchars((string) $user['prenom']) ?>
+                            <?= htmlspecialchars((string) $user['nom']) ?>
+                        </span>
+
+                        <a
+                            class="nav-link"
+                            href="/logout"
+                        >
+                            Déconnexion
+                        </a>
+
+                    <?php endif; ?>
+
+                </div>
+            </div>
+
+        </div>
     </nav>
 </header>

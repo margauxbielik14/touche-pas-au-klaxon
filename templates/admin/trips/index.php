@@ -3,31 +3,45 @@
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/layouts/header.php';
+
 ?>
 
-<main class="container py-5">
+<main class="container py-5 flex-grow-1">
 
-    <h1 class="mb-4">Trajets</h1>
+    <div class="mb-4">
+
+        <h1 class="mb-1">
+            Trajets
+        </h1>
+
+        <p class="text-muted mb-0">
+            Gérer l'ensemble des trajets proposés dans l'application.
+        </p>
+
+    </div>
 
     <?php if (!empty($flashSuccess)): ?>
 
-    <div class="alert alert-success">
-        <?= htmlspecialchars((string) $flashSuccess) ?>
-    </div>
+        <div class="alert alert-success" role="alert">
+            <?= htmlspecialchars((string) $flashSuccess) ?>
+        </div>
 
-<?php endif; ?>
+    <?php endif; ?>
 
     <?php if (empty($trips)): ?>
 
-        <p>Aucun trajet disponible.</p>
+        <div class="alert alert-info" role="alert">
+            Aucun trajet disponible.
+        </div>
 
     <?php else: ?>
 
         <div class="table-responsive">
 
-            <table class="table table-striped align-middle">
+            <table class="table table-hover align-middle">
 
-                <thead>
+                <thead class="table-light">
+
                     <tr>
                         <th>Conducteur</th>
                         <th>Départ</th>
@@ -36,21 +50,34 @@ require dirname(__DIR__, 2) . '/layouts/header.php';
                         <th>Date d'arrivée</th>
                         <th>Places</th>
                         <th>Disponibles</th>
-                        <th>Actions</th>
+                        <th class="text-end">Actions</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
 
                     <?php foreach ($trips as $trip): ?>
 
+                        <?php
+
+                        $departure = new DateTime(
+                            (string) $trip['date_heure_depart']
+                        );
+
+                        $arrival = new DateTime(
+                            (string) $trip['date_heure_arrivee']
+                        );
+
+                        ?>
+
                         <tr>
 
                             <td>
                                 <?= htmlspecialchars(
-                                    $trip['conducteur_prenom']
+                                    (string) $trip['conducteur_prenom']
                                     . ' '
-                                    . $trip['conducteur_nom']
+                                    . (string) $trip['conducteur_nom']
                                 ) ?>
                             </td>
 
@@ -67,15 +94,11 @@ require dirname(__DIR__, 2) . '/layouts/header.php';
                             </td>
 
                             <td>
-                                <?= htmlspecialchars(
-                                    (string) $trip['date_heure_depart']
-                                ) ?>
+                                <?= $departure->format('d/m/Y H:i') ?>
                             </td>
 
                             <td>
-                                <?= htmlspecialchars(
-                                    (string) $trip['date_heure_arrivee']
-                                ) ?>
+                                <?= $arrival->format('d/m/Y H:i') ?>
                             </td>
 
                             <td>
@@ -86,26 +109,34 @@ require dirname(__DIR__, 2) . '/layouts/header.php';
                                 <?= (int) $trip['nombre_places_disponibles'] ?>
                             </td>
 
-                            <td>
-                                <a
-                                    href="/admin/trips/<?= (int) $trip['id_trajet'] ?>/edit"
-                                    class="btn btn-sm btn-outline-primary"
-                                >
-                                    Modifier
-                                </a>
+                            <td class="text-end">
 
-                                <form
-                                    method="POST"
-                                    action="/admin/trips/<?= (int) $trip['id_trajet'] ?>/delete"
-                                    class="d-inline"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm btn-outline-danger"
+                                <div class="d-flex justify-content-end gap-2">
+
+                                    <a
+                                        href="/admin/trips/<?= (int) $trip['id_trajet'] ?>/edit"
+                                        class="btn btn-sm btn-outline-primary"
                                     >
-                                        Supprimer
-                                    </button>
-                                </form>
+                                        Modifier
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="/admin/trips/<?= (int) $trip['id_trajet'] ?>/delete"
+                                        class="d-inline"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                        >
+                                            Supprimer
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
                             </td>
 
                         </tr>
