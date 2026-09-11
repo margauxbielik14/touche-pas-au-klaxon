@@ -6,6 +6,10 @@ require dirname(__DIR__) . '/layouts/header.php';
 
 ?>
 
+<?php
+use App\Core\Csrf;
+?>
+
 <main class="container py-5 flex-grow-1">
 
     <div class="row justify-content-center">
@@ -25,6 +29,12 @@ require dirname(__DIR__) . '/layouts/header.php';
             <?php endif; ?>
 
             <form method="POST" action="/login">
+
+            <input
+            type="hidden"
+            name="csrf_token"
+            value="<?= htmlspecialchars(Csrf::token()) ?>"
+            >
 
                 <div class="mb-3">
 

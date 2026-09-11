@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Csrf;
 use App\Core\Session;
 use App\Repositories\UserRepository;
 
@@ -29,36 +30,40 @@ class AuthController
      * Authenticates a user.
      */
     public function login(): void
-    {
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
+{
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
-        $user = $this->userRepository->findByEmail($email);
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-        if (
-            $user === false
-            || !password_verify($password, (string) $user['mot_de_passe'])
-        ) {
-            $error = 'Adresse email ou mot de passe incorrect.';
+    $user = $this->userRepository->findByEmail($email);
 
-            require dirname(__DIR__, 2) . '/templates/auth/login.php';
+    if (
+        $user === false
+        || !password_verify(
+            $password,
+            (string) $user['mot_de_passe']
+        )
+    ) {
+        $error = 'Adresse email ou mot de passe incorrect.';
 
-            return;
-        }
+        require dirname(__DIR__, 2) . '/templates/auth/login.php';
 
-        Session::set('user', [
-            'id' => $user['id_employe'],
-            'nom' => $user['nom'],
-            'prenom' => $user['prenom'],
-            'email' => $user['email'],
-            'telephone' => $user['telephone'],
-            'role' => $user['role'],
-        ]);
-
-        header('Location: /');
-
-        exit;
+        return;
     }
+
+    Session::set('user', [
+        'id' => $user['id_employe'],
+        'nom' => $user['nom'],
+        'prenom' => $user['prenom'],
+        'email' => $user['email'],
+        'telephone' => $user['telephone'],
+        'role' => $user['role'],
+    ]);
+
+    header('Location: /');
+    exit;
+}
 
     /**
      * Logs the current user out.

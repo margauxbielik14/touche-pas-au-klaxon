@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Core\Session;
 use App\Repositories\TripRepository;
 use App\Repositories\AgencyRepository;
@@ -65,6 +66,8 @@ public function update(string $id): void
 {
     Auth::requireAdmin();
 
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
+
     $tripId = (int) $id;
     $trip = $this->tripRepository->findById($tripId);
 
@@ -87,22 +90,41 @@ public function update(string $id): void
         $errors[] = 'Les agences de départ et d’arrivée sont obligatoires.';
     }
 
+    if (
+    $departureAgencyId > 0
+    && $this->agencyRepository->findById($departureAgencyId) === false
+) {
+    $errors[] = 'L’agence de départ sélectionnée est invalide.';
+}
+
+if (
+    $arrivalAgencyId > 0
+    && $this->agencyRepository->findById($arrivalAgencyId) === false
+) {
+    $errors[] = 'L’agence d’arrivée sélectionnée est invalide.';
+}
+
     if ($departureAgencyId === $arrivalAgencyId) {
         $errors[] = 'Les agences de départ et d’arrivée doivent être différentes.';
     }
 
-    if ($departureDate === '' || $arrivalDate === '') {
-        $errors[] = 'Les dates de départ et d’arrivée sont obligatoires.';
+    $departureTimestamp = strtotime($departureDate);
+$arrivalTimestamp = strtotime($arrivalDate);
+
+if (
+    $departureTimestamp === false
+    || $arrivalTimestamp === false
+) {
+    $errors[] = 'Les dates renseignées sont invalides.';
+} else {
+    if ($departureTimestamp <= time()) {
+        $errors[] = 'La date de départ doit être future.';
     }
 
-    if (
-        $departureDate !== ''
-        && $arrivalDate !== ''
-        && strtotime($arrivalDate) <= strtotime($departureDate)
-    ) {
-        $errors[] = 'La date d’arrivée doit être postérieure à la date de départ.';
+    if ($arrivalTimestamp <= $departureTimestamp) {
+        $errors[] = 'La date d’arrivée doit être postérieure au départ.';
     }
-
+}
     if ($totalSeats <= 0) {
         $errors[] = 'Le nombre de places doit être supérieur à 0.';
     }
@@ -146,6 +168,8 @@ public function update(string $id): void
 public function delete(string $id): void
 {
     Auth::requireAdmin();
+
+    Csrf::requireValid($_POST['csrf_token'] ?? null);
 
     $tripId = (int) $id;
     $trip = $this->tripRepository->findById($tripId);
